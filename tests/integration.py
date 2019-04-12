@@ -42,15 +42,15 @@ class TestIntegration(unittest.TestCase):
     def test_message_doesnotfail(self, metar, rwy):
         self.assertNotEqual(
             message(
-        	metar,
-        	rwy,
-        	self.letter,
-        	settings.AIRPORTS,
-        	settings.TRANSITION,
-        	False,
-        	False,
-        	False,
-        	False),
+                metar,
+                rwy,
+                self.letter,
+                settings.AIRPORTS,
+                settings.TRANSITION,
+                False,
+                False,
+                False,
+                False),
             '')
 
     @unittest.expectedFailure
