@@ -1,7 +1,7 @@
 """
 Message Maker
 
-Copyright (C) 2018  Pedro Rodrigues <prodrigues1990@gmail.com>
+Copyright (C) 2018 - 2019  Pedro Rodrigues <prodrigues1990@gmail.com>
 
 This file is part of messagemaker.
 
