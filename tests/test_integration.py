@@ -34,6 +34,7 @@ class TestIntegration(unittest.TestCase):
         self.rwy = '03'
 
         self.client = app.test_client()
+        app.debug = True
 
     def get(self, metar, rwy, **kwargs):
         if 'letter' not in kwargs:
@@ -54,10 +55,9 @@ class TestIntegration(unittest.TestCase):
             self.get(metar, rwy),
             '')
 
-    @unittest.expectedFailure
     def test_message_containsprecipt(self):
         atis = self.get(
-            'METAR LPPT 010200Z 35010KT 9999 RA SCT027 11/12 Q101',
+            'METAR LPPT 010200Z 35010KT 9999 RA SCT027 11/12 Q1016',
             self.rwy)
         self.assertIn('RA', atis)
 

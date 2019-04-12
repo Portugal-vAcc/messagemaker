@@ -40,10 +40,13 @@ def freq(airport, online_freqs, freq_type):
 def freqinfo(airport, online_freqs):
     dep_freq, dep_msg = freq(airport, online_freqs, 'dep_freq')
     clr_freq, clr_msg = freq(airport, online_freqs, 'clr_freq')
-    del_freq, _ = airport['clr_freq'][0]
-    parts = []
+    try:
+        del_freq, _ = airport['clr_freq'][0]
+    except IndexError:
+        del_freq = None
+    twr_online = airport['twr'] in online_freqs
 
-    twr_online = True if airport['twr'] in online_freqs else False
+    parts = []
     if dep_freq is not None:
         if dep_freq != clr_freq and twr_online:
             parts.append(dep_msg)
@@ -54,26 +57,20 @@ def freqinfo(airport, online_freqs):
         return ' '.join(parts)
 
 def intro(letter, metar):
-    template = '[$airport ATIS] [$letter] $time'
-    return Template(template).substitute(
-        airport=metar.location,
-        letter=letter,
-        time='%02d%02d' % (metar.time.hour, metar.time.minute))
+    time = f'{metar.time.hour:02}{metar.time.minute:02}'
+    return f'[{metar.location} ATIS] [{letter}] {time}'
 
 def approach(rwy, airport):
-    template = '[EXP ${approach} APCH] [RWY IN USE ${rwy}]'
-    return Template(template).substitute(
-        rwy=rwy,
-        approach=airport['approaches'][rwy])
+    approach = airport['approaches'][rwy]
+    return f'[EXP {approach} APCH] [RWY IN USE {rwy}]'
 
 def transition_level(airport, tl_tbl, metar):
-    template = '[TL] %s'
-    transition_alt = airport['transition_altitude']
+    _transition_alt = airport['transition_altitude']
     index = bisect_right(
-        tl_tbl[transition_alt],
+        tl_tbl[_transition_alt],
         (float(metar.report.pressure),))
-    _, transition_level = tl_tbl[transition_alt][index]
-    return template % transition_level
+    _, transition_level = tl_tbl[_transition_alt][index]
+    return f'[TL] {transition_level}'
 
 def arrdep_info(airport, rwy):
     if rwy not in airport['arrdep_info']:
@@ -87,33 +84,18 @@ def wind(metar):
     report = metar.report.wind
     parts = []
     if report.direction == 'VRB':
-        parts.append('[WND] [VRB] %d [KT]' % report.speed)
+        parts.append(f'[WND] [VRB] {report.speed} [KT]')
     else:
-        template = '[WND] ${direction} [DEG] ${speed} [KT]'
-        part = Template(template).substitute(
-            direction='%03d' % report.direction,
-            speed='%d' % report.speed)
-
         # calm winds (to avoid WND 000 DEG 0 KT)
         if report.speed == 0:
             parts.append('[WND] [CALM]')
         else:
-            parts.append(part)
-    ## gusts
+            parts.append(f'[WND] {report.direction:03} [DEG] {report.speed} [KT]')
+
     if report.gust:
-        template = '[MAX] ${gusts} [KT]'
-        part = Template(template).substitute(
-            gusts='%d' % report.gust
-        )
-        parts.append(part)
-    ## variable
+        parts.append(f'[MAX] {report.gust} [KT]')
     if report.variable_from and report.variable_to:
-        template = '[VRB BTN] ${direction_from} [AND] ${direction_to} [DEG]'
-        part = Template(template).substitute(
-            direction_from='%03d' % report.variable_from,
-            direction_to='%03d' % report.variable_to
-        )
-        parts.append(part)
+        parts.append(f'[VRB BTN] {report.variable_from:03} [AND] {report.variable_to:03} [DEG]')
     return ' '.join(parts)
 
 def weather(metar):
@@ -160,7 +142,7 @@ def vis(metar):
         vis = int(vis / 1000)
         units = 'KM'
     if vis % 100 == 0:
-        vis = '{%d}' % vis
+        vis = f'{{{vis}}}'
 
     return f'[VIS] {vis}[{units}]'
 
@@ -180,7 +162,7 @@ def rvr(metar):
         rvr = int(rvr / 1000)
         units = 'KM'
     if rvr % 100 == 0:
-        rvr = '{%d}' % rvr
+        rvr = f'{{{rvr}}}'
 
     return f'[RVR TDZ] {rvr}[{units}]'
 
@@ -207,10 +189,11 @@ def sky(metar):
             parts.append('[CLD]')
         for cloud in clouds:
             camount, cheight, ctype = cloud
-            parts.append('[%s]' % camount)
+            parts.append(f'[{camount}]')
             if ctype:
-                parts.append('[%s]' % ctype)
-            parts.append('{%d} [FT]' % (cheight * 100))
+                parts.append(f'[{ctype}]')
+            cheight = cheight * 100
+            parts.append(f'{{{cheight}}} [FT]')
         if metar.verticalvis is not None:
             parts.append(f'[VV] {{{metar.verticalvis * 100}}} [FT]')
     return ' '.join(parts)
@@ -227,17 +210,8 @@ def qnh(metar):
     pressure = metar.report.pressure
     return f'[QNH] {pressure}'
 
-def remove_windshear(metar):
-    cases = ('WS ALL RWYS', 'WS R03', 'WS R21')
-    for case in cases:
-        windshear_index = metar.find(case)
-        if windshear_index > -1:
-            return metar[0:windshear_index]
-    return metar
-
 def download_metar(icao):
-    return requests.get(
-        'https://avwx.rest/api/metar/%s' % icao).json()['Raw-Report']
+    return requests.get(f'https://avwx.rest/api/metar/{icao}').json()['Raw-Report']
 
 def getonlinestations(airport):
     """Returns all vatsim frequencies online at
@@ -246,9 +220,8 @@ def getonlinestations(airport):
     freqs = tuple(chain(airport['clr_freq'], airport['dep_freq']))
     freqs = { '{:0<7}'.format(freq) for freq, _ in freqs }
 
-    where = ','.join(('{"frequency":"%s"}' % freq for freq in freqs))
-    url = 'https://vatsim-status-proxy.herokuapp.com/clients?\
-where={"$or":[%s]}' % where
+    where = ','.join((f'{{"frequency":"{freq}"}}' for freq in freqs))
+    url = f'https://vatsim-status-proxy.herokuapp.com/clients?where={{"$or":[{where}]}}'
 
     response = requests.get(url)
     if response.status_code != 200:
