@@ -8,6 +8,67 @@ Without disconsideration to the above, information deemed as not useful on VATSI
 Message Maker is provided as free software under the terms of the GNU General Public License, version 2 of the license.
 Other software used by Message Maker may be provided under different licenses, please refer to any 
 
+## Running the application
+
+Use the provided management script `manage.py`. Run `python manage.py` for a list of available options.
+
+Make sure to use python 3.7 or above, install the requirements with
+
+```pip install -r requirements.txt```
+
+### Run the tests
+
+```python manage.py test```
+
+### Run the app
+
+```python manage.py run```
+
+If running a development serve use
+
+```python manage.py run --debug```
+
+## Usage options
+
+All optional information available to display on the ATIS message is controlable via a corresponding URL parameter.
+
+Some options are airport specific and are ignored where they do not apply.
+
+### Show Frequencies
+
+**default** True
+
+This option is on by default but you can similarly disable it by forcing it to off:
+
+`&show_freqs=False`
+
+Displays information of frequencies to contact on ground and/or after departure, when they differ from the ones published on the charts.
+
+### Transponder on startup
+
+```
+&xpndr_startup=True
+
+EXP XPNDR ONLY AT STARTUP
+```
+
+### Runway 35 closed
+
+```
+&rwy_35_clsd=True
+
+RWY 35 CLSD FOR TKOF AND LDG AVBL TO TAXI
+```
+
+### High intensity runway operations
+
+```
+&hiro=True
+
+HIGH INTENSITY RWY OPS
+```
+
+
 ## Euroscope Installation
 
 1. Get the [latest audio package.zip](https://github.com/pedro2555/messagemaker/releases/latest), extract to `Documents/Euroscope/messagemaker/`.
