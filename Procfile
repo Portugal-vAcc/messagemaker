@@ -1,1 +1,1 @@
-web: python manage.py run
+web: gunicorn messagemaker:app --log-file=-
