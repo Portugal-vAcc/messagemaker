@@ -3,14 +3,16 @@ sudo: false
 language: python
 cache: pip
 python: 3.7
-before_script: "pip install -r requirements.txt"
+before_script:
+  - "sudo apt-get update"
+  - "pip install -r requirements.txt"
 script:
   - "coverage run --source=messagemaker -m unittest -v"
   - "coverage report --show-missing"
 after_success:
   - "sudo apt-get install sox zip"
   - "python manage.py package package/"
-  - "zip -r ../package.zip package/"
+  - "zip -r package.zip package/"
 deploy:
   provider: releases
   api_key: "$GH_TOKEN"
