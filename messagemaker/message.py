@@ -29,32 +29,6 @@ from itertools import chain
 from collections import namedtuple
 from avweather.metar import parse as metarparse
 
-def message_try(metar,
-                rwy,
-                letter,
-                airports,
-                tl_tbl,
-                show_freqs = False,
-                hiro=False,
-                xpndr_startup=False,
-                rwy_35_clsd=False):
-    response = None
-    try:
-        response = message(
-            metar,
-            rwy,
-            letter,
-            airports,
-            tl_tbl,
-            show_freqs,
-            hiro,
-            xpndr_startup,
-            rwy_35_clsd)
-    except Exception as crap:
-        print(traceback.format_exc())
-
-    return '[ATIS OUT OF SERVICE]' if response is None else response
-
 def freq(airport, online_freqs, freq_type):
     parts = airport[freq_type]
     for freq, part in parts:
@@ -260,54 +234,6 @@ def remove_windshear(metar):
         if windshear_index > -1:
             return metar[0:windshear_index]
     return metar
-
-def message(metar,
-            rwy,
-            letter,
-            airports,
-            tl_tbl,
-            show_freqs,
-            hiro,
-            xpndr_startup,
-            rwy_35_clsd):
-    if len(metar) == 4:
-        metar = download_metar(metar)
-
-    metar = metarparse(metar)
-    airport = airports[metar.location]
-    parts = []
-
-    parts.append(intro(letter, metar))
-    if ',' in rwy:
-        rwy = rwy.split(',')[0]
-    parts.append(approach(rwy, airport))
-    parts.append(transition_level(airport, tl_tbl, metar))
-    if xpndr_startup and 'xpndr_startup' in airport:
-        parts.append(airport['xpndr_startup'])
-    if hiro and 'hiro' in airport:
-        parts.append(airport['hiro'])
-    if rwy_35_clsd and 'rwy_35_clsd' in airport:
-        parts.append(airport['rwy_35_clsd'])
-    if show_freqs:
-        part = freqinfo(airport, tuple(getonlinestations(airport)))
-        if part is not None:
-            parts.append(part)
-    parts.append(arrdep_info(airport, rwy))
-    parts.append(wind(metar))
-    if metar.report.sky:
-        parts.append(weather(metar))
-    parts.append(sky(metar))
-    parts.append(temperature(metar))
-    parts.append(dewpoint(metar))
-    parts.append(qnh(metar))
-
-    # general arrival and departure information
-    for general_info in airport['general_info']:
-        parts.append(general_info)
-
-    parts.append('[ACK %s INFO] [%s]' % (metar.location, letter))
-
-    return ' '.join(parts) if parts is not None else None
 
 def download_metar(icao):
     return requests.get(

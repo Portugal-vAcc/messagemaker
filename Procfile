@@ -1,1 +1,1 @@
-web: gunicorn flaskrun:app --log-file=-
+web: python manage.py run

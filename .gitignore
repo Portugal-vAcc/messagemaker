@@ -1,13 +1,23 @@
+# virtualenv
 bin
 include
 lib
 local
+share
+pip-selfcheck.json
+
+# python bin
 *.pyc
+**/*.pyc
+
+# setuptools
 *.egg-info
 man
-**/*.pyc
 *.egg-info
 .eggs
+
+# tests
+.coverage
+
+# local dev
 sample.data
-pip-selfcheck.json
-share

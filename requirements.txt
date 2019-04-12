@@ -1,4 +1,7 @@
-avweather
-requests
-Flask
-gunicorn
+avweather==0.1.1
+Click==7.0
+coverage==4.5.3
+ddt==1.2.1
+Flask==1.0.2
+gunicorn==19.9.0
+requests==2.21.0
