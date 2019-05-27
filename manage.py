@@ -72,6 +72,7 @@ def package(dest_folder, nuke):
             if audio.suffix != '.wav':
                 continue
 
+            # this is only required since GNG does not accept some characters for filenames..
             special_chars = ['.', ',']
             safe_filename = audio.stem
             for special_char in special_chars:
