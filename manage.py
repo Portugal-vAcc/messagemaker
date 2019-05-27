@@ -66,7 +66,7 @@ def package(dest_folder, nuke):
         return
 
     os.makedirs(dest_folder)
-    with open(f'{dest_folder}/atisfile.txt', 'w') as atisfile:
+    with open(f'{dest_folder}/atisfiles.txt', 'w') as atisfile:
         for file in os.listdir('audio'):
             audio = Path(file)
             if audio.suffix != '.wav':
