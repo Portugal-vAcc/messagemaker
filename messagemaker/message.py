@@ -221,7 +221,7 @@ def getonlinestations(airport):
     freqs = { '{:0<7}'.format(freq) for freq, _ in freqs }
 
     where = ','.join((f'{{"frequency":"{freq}"}}' for freq in freqs))
-    url = f'https://vatsim-status-proxy.herokuapp.com/clients?where={{"$or":[{where}]}}'
+    url = f'https://vatsim-api.herokuapp.com/clients?where={{"$or":[{where}]}}'
 
     response = requests.get(url)
     if response.status_code != 200:
