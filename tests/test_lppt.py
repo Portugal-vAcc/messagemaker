@@ -47,7 +47,7 @@ class TestLpptAtis(unittest.TestCase):
 
     @data(
         ('03', '[EXP ILS APCH] [RWY IN USE 03]'),
-        ('21', '[EXP ILS Z APCH] [RWY IN USE 21]'),
+        ('21', '[EXP ILS APCH] [RWY IN USE 21]'),
     )
     @unpack
     def test_approach(self, rwy, expected):
