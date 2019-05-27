@@ -72,7 +72,10 @@ def package(dest_folder, nuke):
             if audio.suffix != '.wav':
                 continue
 
-            safe_filename = audio.stem.replace('.', '')
+            special_chars = ['.', ',']
+            safe_filename = audio.stem
+            for special_char in special_chars:
+                safe_filename = safe_filename.replace(special_char, '')
             subprocess.call(['sox',
                 '--norm', f'audio/{file}',
                 '-b', '16',     # sample size, 16bits
