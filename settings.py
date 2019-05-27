@@ -24,7 +24,7 @@ along with Message Maker.  If not, see <http://www.gnu.org/licenses/>.
 LPPT = {
     'approaches': {
         '03': 'ILS',
-        '21': 'ILS Z',
+        '21': 'ILS',
         '35': 'VOR DME',
         '17': 'VISUAL'
     },
