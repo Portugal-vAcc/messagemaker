@@ -6,7 +6,7 @@ All ATIS text and recordings are intended to be as close, as is possible on VATS
 Without disconsideration to the above, information deemed as not useful on VATSIM and/or in simulation may not be provided, despite its publication on the real ATIS for the time or situation.
 
 Message Maker is provided as free software under the terms of the GNU General Public License, version 2 of the license.
-Other software used by Message Maker may be provided under different licenses, please refer to any 
+Other software used by Message Maker may be provided under different licenses, please refer to any
 
 ## Running the application
 
@@ -83,7 +83,7 @@ HIGH INTENSITY RWY OPS
 
 3. On the same dialog, replace your current `ATIS Maker URL` with:
 
-    `https://messagemaker.herokuapp.com/?metar=$metar($atisairport)&rwy=$arrrwy($atisairport)&letter=$atiscode`
+    `https://messagemaker.herokuapp.com/?metar=$metar($atisairport)&rwy=$arrrwy($atisairport)&letter=$atiscode&show_freqs=True&hiro=False&xpndr_startup=False&rwy_35_clsd=False`
 
 ## Contributing
 
