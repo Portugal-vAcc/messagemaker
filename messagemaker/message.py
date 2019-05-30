@@ -211,7 +211,7 @@ def qnh(metar):
     return f'[QNH] {pressure}'
 
 def download_metar(icao):
-    return requests.get(f'https://avwx.rest/api/metar/{icao}').json()['Raw-Report']
+    return requests.get(f'https://avwx.rest/api/metar/{icao}').json()['raw']
 
 def getonlinestations(airport):
     """Returns all vatsim frequencies online at
