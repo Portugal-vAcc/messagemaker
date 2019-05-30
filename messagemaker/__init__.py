@@ -20,6 +20,7 @@ along with Message Maker.  If not, see <http://www.gnu.org/licenses/>.
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from flask import Flask, request
+import logging
 import settings
 import os
 
@@ -85,5 +86,6 @@ def main():
     except Exception as crap:
         if app.debug:
             raise
-        print(crap)
+        logging.error(f'out of service', exc_info=True)
+        logging.info(f'metar: {metar}')
         return '[ATIS OUT OF SERVICE]'
