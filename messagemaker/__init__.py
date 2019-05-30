@@ -86,6 +86,6 @@ def main():
     except Exception as crap:
         if app.debug:
             raise
+        logging.error(f'metar: {metar}')
         logging.error(f'out of service', exc_info=True)
-        logging.info(f'metar: {metar}')
         return '[ATIS OUT OF SERVICE]'
