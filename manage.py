@@ -22,6 +22,7 @@ import click
 import subprocess
 import shutil
 from pathlib import Path
+from shutil import copyfile
 
 @click.group()
 def cli():
@@ -66,6 +67,8 @@ def package(dest_folder, nuke):
         return
 
     os.makedirs(dest_folder)
+    for file in ['LICENSE', 'COPYING']:
+        copyfile(file, f'{dest_folder}/{file}')
     with open(f'{dest_folder}/atisfiles.txt', 'w') as atisfile:
         for file in os.listdir('audio'):
             audio = Path(file)
