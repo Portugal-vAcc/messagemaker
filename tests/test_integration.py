@@ -71,8 +71,7 @@ class TestIntegration(unittest.TestCase):
             self.get(
                 metar,
                 self.rwy),
-            '',
-            'Python Metar module bug, see issue #13')
+            '')
 
     def test_message_hiro(self):
         msg = self.get(
