@@ -36,7 +36,7 @@ def main():
     if not metar or not rwy or not letter:
         return 'wrong usage'
 
-    show_freqs = request.args.get('show_freqs', 'True') == 'True'
+    show_freqs = False # request.args.get('show_freqs', 'True') == 'True'
     hiro = request.args.get('hiro', 'False') == 'True'
     xpndr_startup = request.args.get('xpndr_startup', 'False') == 'True'
     rwy_35_clsd = request.args.get('rwy_35_clsd', 'False') == 'True'
