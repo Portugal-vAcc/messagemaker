@@ -83,7 +83,7 @@ HIGH INTENSITY RWY OPS
 
 3. On the same dialog, replace your current `ATIS Maker URL` with:
 
-    `https://messagemaker.herokuapp.com/?metar=$metar($atisairport)&rwy=$arrrwy($atisairport)&letter=$atiscode&show_freqs=True&hiro=False&xpndr_startup=False&rwy_35_clsd=False`
+    `https://atis-pt.herokuapp.com/?metar=$metar($atisairport)&rwy=$arrrwy($atisairport)&letter=$atiscode&show_freqs=True&hiro=False&xpndr_startup=False&rwy_35_clsd=False`
 
 ## Contributing
 
