@@ -8,25 +8,21 @@ Without disconsideration to the above, information deemed as not useful on VATSI
 Message Maker is provided as free software under the terms of the GNU General Public License, version 2 of the license.
 Other software used by Message Maker may be provided under different licenses, please refer to any
 
-## Running the application
+## Euroscope Installation
 
-Use the provided management script `manage.py`. Run `python manage.py` for a list of available options.
+1. Get the [latest audio package.zip](https://github.com/pedro2555/messagemaker/releases/latest) from the releases tab, extract to `Documents/Euroscope/messagemaker/`.
 
-Make sure to use python 3.7 or above, install the requirements with
+![Screenshot_4](https://user-images.githubusercontent.com/1645623/54699336-b93bf480-4b28-11e9-9673-5a3600ccb96a.jpg)
 
-```pip install -r requirements.txt```
+![image](https://user-images.githubusercontent.com/1645623/38401424-92d36974-394d-11e8-9bb0-c5e2535b1de8.png)
 
-### Run the tests
+2. On the `Voice ATIS Setup Dialog` in Euroscope, select the `atisfiles.txt` included with the audio package
 
-```python manage.py test```
+![image](https://user-images.githubusercontent.com/1645623/38401444-b149ae54-394d-11e8-9b5a-e95d8944f86e.png)
 
-### Run the app
+3. On the same dialog, replace your current `ATIS Maker URL` with:
 
-```python manage.py run```
-
-If running a development serve use
-
-```python manage.py run --debug```
+    `https://atis-pt.herokuapp.com/?metar=$metar($atisairport)&rwy=$arrrwy($atisairport)&letter=$atiscode&show_freqs=True&hiro=False&xpndr_startup=False&rwy_35_clsd=False`
 
 ## Usage options
 
@@ -67,23 +63,6 @@ RWY 35 CLSD FOR TKOF AND LDG AVBL TO TAXI
 
 HIGH INTENSITY RWY OPS
 ```
-
-
-## Euroscope Installation
-
-1. Get the [latest audio package.zip](https://github.com/pedro2555/messagemaker/releases/latest), extract to `Documents/Euroscope/messagemaker/`.
-
-![Screenshot_4](https://user-images.githubusercontent.com/1645623/54699336-b93bf480-4b28-11e9-9673-5a3600ccb96a.jpg)
-
-![image](https://user-images.githubusercontent.com/1645623/38401424-92d36974-394d-11e8-9bb0-c5e2535b1de8.png)
-
-2. On the `Voice ATIS Setup Dialog` in Euroscope, select the `atisfiles.txt` included with the audio package
-
-![image](https://user-images.githubusercontent.com/1645623/38401444-b149ae54-394d-11e8-9b5a-e95d8944f86e.png)
-
-3. On the same dialog, replace your current `ATIS Maker URL` with:
-
-    `https://atis-pt.herokuapp.com/?metar=$metar($atisairport)&rwy=$arrrwy($atisairport)&letter=$atiscode&show_freqs=True&hiro=False&xpndr_startup=False&rwy_35_clsd=False`
 
 ## Contributing
 
