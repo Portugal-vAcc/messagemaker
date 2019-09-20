@@ -50,6 +50,7 @@ def main():
 
         metar = metarparse(metar)
         airport = airports[metar.location]
+        online_stations = ('119.100', '118.100', '121.750', '118.950')
         parts = []
 
         parts.append(intro(letter, metar))
@@ -64,7 +65,7 @@ def main():
         if rwy_35_clsd and 'rwy_35_clsd' in airport:
             parts.append(airport['rwy_35_clsd'])
         if show_freqs:
-            part = freqinfo(airport, tuple(getonlinestations(airport)))
+            part = freqinfo(airport, online_stations)
             if part is not None:
                 parts.append(part)
         parts.append(arrdep_info(airport, rwy))
