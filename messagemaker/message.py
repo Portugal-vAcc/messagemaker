@@ -62,7 +62,7 @@ def intro(letter, metar):
 
 def approach(rwy, airport):
     approach = airport['approaches'][rwy]
-    return f'[EXP {approach} APCH] [RWY IN USE {rwy}]'
+    return f'[{approach}] [RWY IN USE {rwy}]'
 
 def transition_level(airport, tl_tbl, metar):
     _transition_alt = airport['transition_altitude']

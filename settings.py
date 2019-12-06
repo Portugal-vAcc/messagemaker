@@ -23,10 +23,10 @@ along with Message Maker.  If not, see <http://www.gnu.org/licenses/>.
 
 LPPT = {
     'approaches': {
-        '03': 'ILS',
-        '21': 'ILS',
-        '35': 'VOR DME',
-        '17': 'VISUAL'
+        '03': 'EXP ILS APCH',
+        '21': 'EXP ILS APCH',
+        '35': 'EXP VOR DME APCH',
+        '17': 'EXP VISUAL APCH'
     },
     'arrdep_info': {
         '03': [
@@ -66,8 +66,8 @@ ADVISE BEFORE TAX]',
 }
 LPFR = {
     'approaches': {
-        '10': 'R-NAV', # é substituído em [EXP <aqui> APCH]
-        '28': 'ILS'
+        '10': 'EXP R-NAV APCH',
+        '28': 'EXP ILS APCH'
     },
     'arrdep_info': {
         '10': [],
@@ -91,7 +91,7 @@ LPFR = {
 }
 LPPR = {
     'approaches': {
-        '17': 'ILS DME', # é substituído em [EXP <aqui> APCH]
+        '17': 'EXP ILS DME APCH',
         '35': 'R-NAV'
     },
    'arrdep_info': {
@@ -116,8 +116,8 @@ LPPR = {
 }
 LPMA = {
     'approaches': {
-        '05': 'VOR DME', # é substituído em [EXP <aqui> APCH]
-        '23': 'VOR DME'
+        '05': 'EXP VOR DME APCH OTHER APPROACHES AVBL O/R',
+        '23': 'EXP VOR DME APCH OTHER APPROACHES AVBL O/R'
     },
     'arrdep_info': {
         '05': [],
