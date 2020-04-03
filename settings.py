@@ -138,12 +138,66 @@ LPMA = {
        'LPPC',
     ),
 }
+LPPD = {
+    'approaches': {
+        '12': 'EXP R-NAV APCH',
+        '30': 'EXP ILS APCH'
+    },
+    'arrdep_info': {
+        '12': [],
+        '30': []
+    },
+    'general_info': [],
+    'transition_altitude': '6000',
+    'clr_freq': (
+        # freq, contact message
+        ('118.300', ''),
+        ('119.400', '[ON THE GROUND CONTACT APP 119.4]'),
+        ('132.150', '[ON THE GROUND CONTACT 132.150]'),
+        ('132.075', '[ON THE GROUND CONTACT 132.075]'),
+    ),
+    'twr': '118.300',
+    'dep_freq': (),
+    'callsigns': (
+       'LPPD',
+       'LPPO',
+    ),
+}
+LPLA = {
+    'approaches': {
+        '15': 'EXP ILS APCH',
+        '33': 'EXP ILS APCH'
+    },
+    'arrdep_info': {
+        '15': ['[IN CASE OF GO AROUND FLY RWY HDG CLIMB TO 3000 FT]',
+               '[CAUTION HIGH TERRAIN BOTH SIDES OF RWY]'],
+        '33': ['[CAUTION HIGH TERRAIN BOTH SIDES OF RWY]']
+    },
+    'general_info': [],
+    'transition_altitude': '5000',
+    'clr_freq': (
+        # freq, contact message
+        ('121.900', ''),
+        ('122.100', '[ON THE GROUND CONTACT TWR 122.100]'),
+        ('135.000', '[ON THE GROUND CONTACT APP 135.000]'),
+        ('132.150', '[ON THE GROUND CONTACT 132.150]'),
+        ('132.075', '[ON THE GROUND CONTACT 132.075]'),
+    ),
+    'twr': '122.100',
+    'dep_freq': (),
+    'callsigns': (
+       'LPLA',
+       'LPPO',
+    ),
+}
 
 AIRPORTS = {
     'LPPT': LPPT,
     'LPFR': LPFR,
     'LPPR': LPPR,
-    'LPMA': LPMA
+    'LPMA': LPMA,
+    'LPPD': LPPD,
+    'LPLA': LPLA,
 }
 
 TRANSITION = {
