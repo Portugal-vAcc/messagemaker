@@ -1,6 +1,6 @@
 # Message Maker [![Build Status](https://travis-ci.org/Portugal-vAcc/messagemaker.svg?branch=master)](https://travis-ci.org/Portugal-vAcc/messagemaker)
 
-Message Maker provides ATIS services for VATSIM at LPPT, LPPR, LPFR, and LPMA airfields.
+Message Maker provides ATIS services for VATSIM at LPPT, LPPR, LPFR, LPMA, LPPD, and LPLA airfields.
 All ATIS text and recordings are intended to be as close, as is possible on VATSIM, to the real ATIS provided by NAV Portugal at the respective airfields.
 
 Without disconsideration to the above, information deemed as not useful on VATSIM and/or in simulation may not be provided, despite its publication on the real ATIS for the time or situation.
