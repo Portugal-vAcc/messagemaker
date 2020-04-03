@@ -89,7 +89,7 @@ def wind(metar):
         # calm winds (to avoid WND 000 DEG 0 KT)
         if report.speed == 0:
             parts.append('[WND] [CALM]')
-        else:
+        elif report.direction != '///' and report.speed != '//':
             parts.append(f'[WND] {report.direction:03} [DEG] {report.speed} [KT]')
 
     if report.gust:
