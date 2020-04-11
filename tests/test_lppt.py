@@ -23,15 +23,13 @@ import unittest
 from ddt import ddt, data, unpack
 from avweather.metar import parse
 
-from messagemaker.message import *
-import settings
+from src.atis import *
 
 @ddt
 class TestLpptAtis(unittest.TestCase):
 
     def setUp(self):
-        self.airport = settings.AIRPORTS['LPPT']
-        self.transition = settings.TRANSITION
+        self.metar = parse('METAR LPPT 191800Z 35015KT CAVOK 11/06 Q0942')
         self.letter = 'A'
 
     @data(
@@ -43,7 +41,7 @@ class TestLpptAtis(unittest.TestCase):
     @unpack
     def test_intro(self, metar, expected):
         metar = parse(metar)
-        self.assertEqual(intro(self.letter, metar), expected)
+        self.assertEqual(intro(metar, self.letter), expected)
 
     @data(
         ('03', '[EXP ILS APCH] [RWY IN USE 03]'),
@@ -51,7 +49,7 @@ class TestLpptAtis(unittest.TestCase):
     )
     @unpack
     def test_approach(self, rwy, expected):
-        self.assertEqual(approach(rwy, self.airport), expected)
+        self.assertEqual(approach(self.metar, rwy), expected)
 
     @data(
         ('METAR LPPT 191800Z 35015KT CAVOK 11/06 Q0942', '[TL] 75'),
@@ -73,7 +71,7 @@ class TestLpptAtis(unittest.TestCase):
     def test_transitionlevel(self, metar, expected):
         metar = parse(metar)
         self.assertEqual(
-            transition_level(self.airport, self.transition, metar),
+            transition_level(metar),
             expected)
 
     @data(
@@ -92,7 +90,7 @@ class TestLpptAtis(unittest.TestCase):
     )
     @unpack
     def test_clrfreq(self, onlinefreqs, expected):
-        f, _ = freq(self.airport, onlinefreqs, 'clr_freq')
+        f, _ = freq(self.metar, onlinefreqs, 'clr_freq')
         self.assertEqual(
             expected,
             f,
@@ -110,7 +108,7 @@ class TestLpptAtis(unittest.TestCase):
     )
     @unpack
     def test_depfreq(self, online_freqs, expected):
-        f, _ = freq(self.airport, online_freqs, 'dep_freq')
+        f, _ = freq(self.metar, online_freqs, 'dep_freq')
         self.assertIn(
             expected,
             f,
@@ -156,7 +154,8 @@ class TestLpptAtis(unittest.TestCase):
     )
     @unpack
     def test_freqinfo(self, online_freqs, expected):
-        part = freqinfo(self.airport, online_freqs)
+        print('metar', self.metar)
+        part = freqinfo(self.metar, online_freqs)
         self.assertEqual(
             expected,
             part,
@@ -171,7 +170,7 @@ TKOF AVBL DIST 2410 M IF UNABLE ADVISE BEFORE TAX]'),
     @unpack
     def test_arrdepinfo(self, rwy, expected):
         self.assertEqual(
-            arrdep_info(self.airport, rwy),
+            arrdep_info(self.metar, rwy),
             expected)
 
     @data(

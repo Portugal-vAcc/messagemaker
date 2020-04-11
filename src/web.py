@@ -37,8 +37,7 @@ def main():
         return f'missing or wrong argument {missing_or_wrong}'
 
     # get all args to their correct types
-    args = endpoint.parse_args(request.args)
-
+    args   = endpoint.parse_args(request.args)
     metar  = endpoint.get_metar(args)
     rwy    = endpoint.get_rwy(args)
     letter = endpoint.get_letter(args)
@@ -53,7 +52,7 @@ def main():
     # controller selected options
     for option in ['xpndr_startup', 'hiro', 'rwy_35_clsd']:
         if endpoint.has_option_set(args, option):
-            parts += [atis.get_airport_option(metar, option)]
+            parts += atis.get_airport_option(metar, option)
 
     # online frequencies to contact
     if endpoint.has_option_set(args, 'show_freqs'):
@@ -72,12 +71,11 @@ def main():
     parts += [atis.qnh(metar)]
 
     # general arrival and departure information
-    parts += atis.general_info(metar)
+    parts += atis.get_airport_option(metar, 'general_info')
 
     # acknowledge information
     parts += [atis.ack(metar, letter)]
 
-    print(parts)
     return ' '.join([part for part in parts if part is not None])
 
 @app.errorhandler(Exception)

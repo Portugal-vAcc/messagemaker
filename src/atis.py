@@ -20,7 +20,6 @@ along with Message Maker.  If not, see <http://www.gnu.org/licenses/>.
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from string import Template
-from messagemaker import *
 from bisect import bisect_right
 import requests
 import json
@@ -31,7 +30,8 @@ from avweather.metar import parse as metarparse
 
 from . import settings
 
-def freq(airport, online_freqs, freq_type):
+def freq(metar, online_freqs, freq_type):
+    airport = settings.AIRPORTS[metar.location]
     parts = airport[freq_type]
     for freq, part in parts:
         if freq in online_freqs:
@@ -39,9 +39,10 @@ def freq(airport, online_freqs, freq_type):
 
     return None, None
 
-def freqinfo(airport, online_freqs):
-    dep_freq, dep_msg = freq(airport, online_freqs, 'dep_freq')
-    clr_freq, clr_msg = freq(airport, online_freqs, 'clr_freq')
+def freqinfo(metar, online_freqs):
+    airport = settings.AIRPORTS[metar.location]
+    dep_freq, dep_msg = freq(metar, online_freqs, 'dep_freq')
+    clr_freq, clr_msg = freq(metar, online_freqs, 'clr_freq')
     try:
         del_freq, _ = airport['clr_freq'][0]
     except IndexError:
@@ -101,7 +102,7 @@ def wind(metar):
         # calm winds (to avoid WND 000 DEG 0 KT)
         if report.speed == 0:
             parts.append('[WND] [CALM]')
-        else:
+        elif report.direction != '///' and report.speed != '//':
             parts.append(f'[WND] {report.direction:03} [DEG] {report.speed} [KT]')
 
     if report.gust:
@@ -111,9 +112,12 @@ def wind(metar):
     return ' '.join(parts)
 
 def weather(metar):
+    if not metar.report.sky:
+        return None
+
     weather = metar.report.sky.weather
     if not weather:
-        return ''
+        return None
 
     parts = []
 
@@ -222,9 +226,10 @@ def qnh(metar):
     pressure = metar.report.pressure
     return f'[QNH] {pressure}'
 
-def general_info(metar):
+def get_airport_option(metar, option):
     airport = settings.AIRPORTS[metar.location]
-    return airport['general_info']
+    value = airport.get(option) 
+    return value if isinstance(value, list) else [value]
 
 def ack(metar, letter):
     return f'[ACK {metar.location} INFO] [{letter}]'

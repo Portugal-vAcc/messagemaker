@@ -26,8 +26,10 @@ def download(icao):
 
     response = requests.post(url, data)
 
-    return re.search(
-        f'METAR\ {icao.upper()}.+$',
+    metar = re.search(
+        f'METAR\ .+$',
         response.text,
         re.MULTILINE,
     ).group()
+
+    return metar
