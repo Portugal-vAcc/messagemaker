@@ -111,3 +111,11 @@ class TestIntegration(unittest.TestCase):
                 'METAR LPFR 191800Z 35015KT CAVOK 11/06 Q1016',
                 '10')
         self.assertNotIn('RWY 35 CLSD FOR TKOF AND LDG AVBL TO TAXI', msg)
+
+    def test_vis_modifiers_order(self):
+        """See https://github.com/pedro2555/messagemaker/issues/52"""
+        msg = self.get(
+                'METAR LPPT 161100Z VRB02KT 1200 0300E R21/0800N BR PRFG FEW001 BKN002 08/08 Q1020',
+                self.rwy,
+                rwy_35_clsd=True)
+        self.assertIn(r'[VIS] {1200}[MTS] [RVR TDZ] {800}[MTS] [BR] [PRFG]', msg)
