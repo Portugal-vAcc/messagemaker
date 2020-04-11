@@ -21,6 +21,9 @@ from avweather.metar import parse
 
 from . import metar_sources
 
+def bool(string):
+    return string.lower() == 'true'
+
 OPTIONS = (
    #('name'         , required, coerse, default)
     ('hiro'         , False   , bool  , False),
@@ -31,9 +34,6 @@ OPTIONS = (
     ('show_freqs'   , False   , bool  , True),
     ('xpndr_startup', False   , bool  , False),
 )
-
-def bool(string):
-    return string.lower() == 'true'
 
 def verify_args(args):
     return [
