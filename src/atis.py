@@ -138,9 +138,6 @@ def weather(metar):
         for phenomena in precip_phenomena:
             parts.append(f'[{phenomena}]')
 
-    for obscur in weather.obscuration:
-        parts.append(f'[{obscur}]')
-
     return ' '.join(parts)
 
 def vis(metar):
@@ -199,6 +196,8 @@ def sky(metar):
             parts.append(vis(_metar))
         if metar.rvr:
             parts.append(rvr(_metar))
+        for obscur in metar.weather.obscuration:
+            parts.append(f'[{obscur}]')
         ## clouds
         clouds = metar.clouds
         if len(clouds) > 0:
