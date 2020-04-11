@@ -21,15 +21,12 @@ along with Message Maker.  If not, see <http://www.gnu.org/licenses/>.
 # -*- coding: utf-8 -*-
 import unittest
 from ddt import ddt, data, unpack
-from messagemaker import app
-import settings
+from src.web import app
 
 @ddt
 class TestIntegration(unittest.TestCase):
 
     def setUp(self):
-        self.airport = settings.AIRPORTS['LPPT']
-        self.transition = settings.TRANSITION
         self.letter = 'A'
         self.rwy = '03'
 

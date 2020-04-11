@@ -5,6 +5,7 @@ lib
 local
 share
 pip-selfcheck.json
+venv/
 
 # python bin
 *.pyc
@@ -21,3 +22,5 @@ man
 
 # local dev
 sample.data
+*.pid
+.vscode

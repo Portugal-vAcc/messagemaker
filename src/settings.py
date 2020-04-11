@@ -3,6 +3,7 @@ Message Maker
 
 Copyright (C) 2018 - 2019  Pedro Rodrigues <prodrigues1990@gmail.com>
                            Bernardo Reis
+                           Hugo Santos <hugogpsantos@gmail.com>
 
 This file is part of Message Maker.
 

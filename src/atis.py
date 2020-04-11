@@ -20,7 +20,6 @@ along with Message Maker.  If not, see <http://www.gnu.org/licenses/>.
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from string import Template
-from messagemaker import *
 from bisect import bisect_right
 import requests
 import json
@@ -29,7 +28,10 @@ from itertools import chain
 from collections import namedtuple
 from avweather.metar import parse as metarparse
 
-def freq(airport, online_freqs, freq_type):
+from . import settings
+
+def freq(metar, online_freqs, freq_type):
+    airport = settings.AIRPORTS[metar.location]
     parts = airport[freq_type]
     for freq, part in parts:
         if freq in online_freqs:
@@ -37,9 +39,10 @@ def freq(airport, online_freqs, freq_type):
 
     return None, None
 
-def freqinfo(airport, online_freqs):
-    dep_freq, dep_msg = freq(airport, online_freqs, 'dep_freq')
-    clr_freq, clr_msg = freq(airport, online_freqs, 'clr_freq')
+def freqinfo(metar, online_freqs):
+    airport = settings.AIRPORTS[metar.location]
+    dep_freq, dep_msg = freq(metar, online_freqs, 'dep_freq')
+    clr_freq, clr_msg = freq(metar, online_freqs, 'clr_freq')
     try:
         del_freq, _ = airport['clr_freq'][0]
     except IndexError:
@@ -56,23 +59,33 @@ def freqinfo(airport, online_freqs):
         parts.append(clr_msg)
         return ' '.join(parts)
 
-def intro(letter, metar):
+def get_freq_info(metar, vatsim_data):
+    return ''
+
+def intro(metar, letter):
     time = f'{metar.time.hour:02}{metar.time.minute:02}'
     return f'[{metar.location} ATIS] [{letter}] {time}'
 
-def approach(rwy, airport):
+def approach(metar, rwy):
+    airport = settings.AIRPORTS[metar.location]
     approach = airport['approaches'][rwy]
     return f'[{approach}] [RWY IN USE {rwy}]'
 
-def transition_level(airport, tl_tbl, metar):
-    _transition_alt = airport['transition_altitude']
+def transition_level(metar):
+    airport = settings.AIRPORTS[metar.location]
+    tl_tbl = settings.TRANSITION
+    transition_alt = airport['transition_altitude']
+
     index = bisect_right(
-        tl_tbl[_transition_alt],
-        (float(metar.report.pressure),))
-    _, transition_level = tl_tbl[_transition_alt][index]
+        tl_tbl[transition_alt],
+        (float(metar.report.pressure),)
+    )
+    _, transition_level = tl_tbl[transition_alt][index]
+
     return f'[TL] {transition_level}'
 
-def arrdep_info(airport, rwy):
+def arrdep_info(metar, rwy):
+    airport = settings.AIRPORTS[metar.location]
     if rwy not in airport['arrdep_info']:
         return ''
     parts = []
@@ -99,9 +112,12 @@ def wind(metar):
     return ' '.join(parts)
 
 def weather(metar):
+    if not metar.report.sky:
+        return None
+
     weather = metar.report.sky.weather
     if not weather:
-        return ''
+        return None
 
     parts = []
 
@@ -210,25 +226,10 @@ def qnh(metar):
     pressure = metar.report.pressure
     return f'[QNH] {pressure}'
 
-def download_metar(icao):
-    return requests.get(f'https://avwx.rest/api/metar/{icao}').json()['raw']
+def get_airport_option(metar, option):
+    airport = settings.AIRPORTS[metar.location]
+    value = airport.get(option) 
+    return value if isinstance(value, list) else [value]
 
-def getonlinestations(airport):
-    """Returns all vatsim frequencies online at
-    a given airport"""
-
-    freqs = tuple(chain(airport['clr_freq'], airport['dep_freq']))
-    freqs = { '{:0<7}'.format(freq) for freq, _ in freqs }
-
-    where = ','.join((f'{{"frequency":"{freq}"}}' for freq in freqs))
-    url = f'https://vatsim-api.herokuapp.com/clients?where={{"$or":[{where}]}}'
-
-    response = requests.get(url)
-    if response.status_code != 200:
-        return ()
-
-    stations = json.loads(response.text)['_items']
-
-    return (station['frequency'] for station in stations
-                for callsign in airport['callsigns']
-                    if callsign in station['callsign'])
+def ack(metar, letter):
+    return f'[ACK {metar.location} INFO] [{letter}]'
