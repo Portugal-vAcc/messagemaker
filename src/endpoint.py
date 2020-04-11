@@ -19,6 +19,8 @@ along with Message Maker.  If not, see <http://www.gnu.org/licenses/>.
 """
 from avweather.metar import parse
 
+from . import metar_sources
+
 OPTIONS = (
    #('name'         , required, coerse, default)
     ('hiro'         , False   , bool  , False),
@@ -48,14 +50,11 @@ def parse_args(args):
 
 def get_metar(args):
     if len(args['metar']) == 4:
-        raw_metar = _download(args['metar'])
+        raw_metar = metar_sources.download(args['metar'])
     else:
         raw_metar = args['metar']
     
     return parse(raw_metar)
-
-def _download(icao):
-    return 'LPPT 110600Z 03003KT 9999 FEW014 12/12 Q1020'
 
 def get_rwy(args):
     # if 2 or more rwys are selected in Euroscope, pick the first one

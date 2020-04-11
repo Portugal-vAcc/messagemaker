@@ -18,6 +18,7 @@ You should have received a copy of the GNU General Public License
 along with Message Maker.  If not, see <http://www.gnu.org/licenses/>.
 """
 import os
+import logging
 from avweather.metar import parse
 from flask import Flask, request
 
@@ -56,7 +57,7 @@ def main():
 
     # online frequencies to contact
     if endpoint.has_option_set(args, 'show_freqs'):
-        vatsim_data = vatsim.get_data()
+        vatsim_data = vatsim.get_online_stations(metar)
         parts += [atis.get_freq_info(metar, vatsim_data)]
 
     # landing and takeoff instructions
@@ -79,6 +80,9 @@ def main():
     print(parts)
     return ' '.join([part for part in parts if part is not None])
 
-# @app.errorhandler(Exception)
-# def handle_exception(e):
-#     return '[ATIS OUT OF SERVICE]'
+@app.errorhandler(Exception)
+def handle_exception(e):
+    logging.error(f'args: {request.args}')
+    logging.error('out of service', exc_info=True)
+
+    return '[ATIS OUT OF SERVICE]'
