@@ -17,4 +17,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Message Maker.  If not, see <http://www.gnu.org/licenses/>.
 """
-from messagemaker import app
+from src.web import app
+
+if __name__ == '__main__':
+    app.run(debug=True)
