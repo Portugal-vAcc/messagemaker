@@ -19,14 +19,15 @@ along with Message Maker.  If not, see <http://www.gnu.org/licenses/>.
 """
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from string import Template
-from bisect import bisect_right
 import requests
 import json
 import traceback
+from string import Template
+from bisect import bisect_right
 from itertools import chain
 from collections import namedtuple
 from avweather.metar import parse as metarparse
+from avweather._metar_parsers import pwind
 
 from . import settings
 
@@ -95,6 +96,8 @@ def arrdep_info(metar, rwy):
 
 def wind(metar):
     report = metar.report.wind
+    if report.direction == '///' or report.speed == '//' and 'WIND' in report.unmatched:
+        report = get_rmk_wind(metar)
     parts = []
     if report.direction == 'VRB':
         parts.append(f'[WND] [VRB] {report.speed} [KT]')
@@ -110,6 +113,13 @@ def wind(metar):
     if report.variable_from and report.variable_to:
         parts.append(f'[VRB BTN] {report.variable_from:03} [AND] {report.variable_to:03} [DEG]')
     return ' '.join(parts)
+
+def get_rmk_wind(metar):
+    for part in metar.unmatched.split():
+        wind, _ = pwind(part)
+
+        if wind is not None:
+            return wind
 
 def weather(metar):
     if not metar.report.sky:
