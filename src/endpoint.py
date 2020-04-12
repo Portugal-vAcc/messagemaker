@@ -21,15 +21,18 @@ from avweather.metar import parse
 
 from . import metar_sources
 
+def _bool(value):
+    return str(value).lower() == 'true'
+
 OPTIONS = (
    #('name'         , required, coerse, default)
-    ('hiro'         , False   , bool  , False),
+    ('hiro'         , False   , _bool  , False),
     ('letter'       , True    , str   , ''),
     ('metar'        , True    , str   , ''),
     ('rwy'          , True    , str   , ''),
-    ('rwy_35_clsd'  , False   , bool  , False),
-    ('show_freqs'   , False   , bool  , True),
-    ('xpndr_startup', False   , bool  , False),
+    ('rwy_35_clsd'  , False   , _bool  , False),
+    ('show_freqs'   , False   , _bool  , True),
+    ('xpndr_startup', False   , _bool  , False),
 )
 
 def verify_args(args):
