@@ -26,10 +26,10 @@ def download(icao):
 
     response = requests.post(url, data)
 
-    metar = re.search(
+    match = re.search(
         f'METAR\ .+$',
         response.text,
         re.MULTILINE,
-    ).group()
+    )
 
-    return metar
+    return match.group() if match else ''

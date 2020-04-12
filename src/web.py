@@ -20,13 +20,25 @@ along with Message Maker.  If not, see <http://www.gnu.org/licenses/>.
 import os
 import logging
 from avweather.metar import parse
-from flask import Flask, request
+from flask import Flask, request, render_template
+from flask_bootstrap import Bootstrap
 
 from . import endpoint
 from . import atis
 from . import vatsim
+from . import metar_sources
 
 app = Flask(__name__)
+Bootstrap(app)
+
+@app.route('/metar')
+def metar():
+    if 'icao' not in request.args:
+        return render_template('metar.html')
+        
+    _metar = metar_sources.download(request.args['icao'])
+
+    return render_template('metar.html', metar=_metar)
 
 @app.route('/')
 def main():
