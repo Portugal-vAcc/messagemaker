@@ -1,0 +1,21 @@
+{% extends "bootstrap/base.html" %}
+{% block title %}Get metar{% endblock %}
+
+{% block content %}
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1 class="display-4">Get metar</h1>
+    <form>
+      <div class="form-group" >
+        <label for="icao">Airport ICAO:</label>
+        <input type="text" id="icao" name="icao"><br><br>
+      </div>
+      <button type="submit" class="btn btn-primary">Get metar</button>
+    </form>
+    <hr class="my-4">
+    <p class="lead">{{metar}}</p>
+  </div>
+</div>
+
+<meta http-equiv="refresh" content="600">
+{% endblock %}
