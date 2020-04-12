@@ -21,9 +21,6 @@ from avweather.metar import parse
 
 from . import metar_sources
 
-def bool(string):
-    return string.lower() == 'true'
-
 OPTIONS = (
    #('name'         , required, coerse, default)
     ('hiro'         , False   , bool  , False),
