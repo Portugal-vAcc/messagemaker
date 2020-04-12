@@ -95,23 +95,23 @@ def arrdep_info(metar, rwy):
     return ' '.join(parts)
 
 def wind(metar):
-    report = metar.report.wind
-    if report.direction == '///' or report.speed == '//' and 'WIND' in report.unmatched:
-        report = get_rmk_wind(metar)
+    wind = metar.report.wind
+    if (wind.direction == '///' or wind.speed == '//') and 'WIND' in metar.unmatched:
+        wind = get_rmk_wind(metar)
     parts = []
-    if report.direction == 'VRB':
-        parts.append(f'[WND] [VRB] {report.speed} [KT]')
+    if wind.direction == 'VRB':
+        parts.append(f'[WND] [VRB] {wind.speed} [KT]')
     else:
         # calm winds (to avoid WND 000 DEG 0 KT)
-        if report.speed == 0:
+        if wind.speed == 0:
             parts.append('[WND] [CALM]')
-        elif report.direction != '///' and report.speed != '//':
-            parts.append(f'[WND] {report.direction:03} [DEG] {report.speed} [KT]')
+        elif wind.direction != '///' and wind.speed != '//':
+            parts.append(f'[WND] {wind.direction:03} [DEG] {wind.speed} [KT]')
 
-    if report.gust:
-        parts.append(f'[MAX] {report.gust} [KT]')
-    if report.variable_from and report.variable_to:
-        parts.append(f'[VRB BTN] {report.variable_from:03} [AND] {report.variable_to:03} [DEG]')
+    if wind.gust:
+        parts.append(f'[MAX] {wind.gust} [KT]')
+    if wind.variable_from and wind.variable_to:
+        parts.append(f'[VRB BTN] {wind.variable_from:03} [AND] {wind.variable_to:03} [DEG]')
     return ' '.join(parts)
 
 def get_rmk_wind(metar):
