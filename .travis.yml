@@ -7,7 +7,7 @@ before_script:
   - "sudo apt-get update"
   - "pip install -r requirements.txt"
 script:
-  - "coverage run --source=messagemaker -m unittest -v"
+  - "coverage run --source=src -m unittest -v"
   - "coverage report --show-missing"
 after_success:
   - "sudo apt-get install sox zip"

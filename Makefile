@@ -41,6 +41,11 @@ run: kill venv run-wsgi
 run-production:		## Runs local API server.
 run-production: kill venv run-wsgi-gunicorn
 
+coverage:		## Runs local API server.
+coverage: venv
+	coverage run --source=src -m unittest -v
+	coverage report --show-missing
+
 run-wsgi:
 	${PYTHON} wsgi.py & echo $$! > wsgi.pid
 
