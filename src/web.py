@@ -31,6 +31,10 @@ from . import metar_sources
 app = Flask(__name__)
 Bootstrap(app)
 
+@app.route('/config')
+def config():
+    return render_template('config.html')
+
 @app.route('/metar')
 def metar():
     if 'icao' not in request.args:
