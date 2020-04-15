@@ -19,13 +19,13 @@ along with Message Maker.  If not, see <http://www.gnu.org/licenses/>.
 """
 import os
 import logging
+import requests
 from avweather.metar import parse
 from flask import Flask, request, render_template
 from flask_bootstrap import Bootstrap
 
 from . import endpoint
 from . import atis
-from . import vatsim
 from . import metar_sources
 
 app = Flask(__name__)
@@ -35,7 +35,7 @@ Bootstrap(app)
 def metar():
     if 'icao' not in request.args:
         return render_template('metar.html')
-        
+
     _metar = metar_sources.download(request.args['icao'])
 
     return render_template('metar.html', metar=_metar)
@@ -68,8 +68,11 @@ def main():
 
     # online frequencies to contact
     if endpoint.has_option_set(args, 'show_freqs'):
-        vatsim_data = vatsim.get_online_stations(metar)
-        parts += [atis.get_freq_info(metar, vatsim_data)]
+        resp = requests.get('http://cluster.data.vatsim.net/vatsim-data.json')
+        data = resp.json()
+
+        parts += [atis.get_clr_freq(metar, data)]
+        parts += [atis.get_dep_freq(metar, data)]
 
     # landing and takeoff instructions
     parts += [atis.arrdep_info(metar, rwy)]
