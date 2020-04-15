@@ -60,7 +60,28 @@ def freqinfo(metar, online_freqs):
         parts.append(clr_msg)
         return ' '.join(parts)
 
-def get_freq_info(metar, vatsim_data):
+def get_clr_freq(metar, vatsim_data):
+    return _get_freq(metar, vatsim_data, 'clr')
+
+def get_dep_freq(metar, vatsim_data):
+    return _get_freq(metar, vatsim_data, 'dep')
+
+def _get_freq(metar, vatsim_data, freq_type):
+    airport = settings.AIRPORTS[metar.location]
+
+    at_airport    = lambda c: c['callsign'][:4] in airport['callsigns']
+    is_controller = lambda c: c['clienttype'] == 'ATC'
+    controllers = [
+        client for client
+        in vatsim_data['clients']
+        if is_controller(client) and at_airport(client)
+    ]
+
+    for freq, msg in airport[f'{freq_type}_freq']:
+        for controller in controllers:
+            if controller['frequency'] == freq:
+                return msg
+
     return ''
 
 def intro(metar, letter):
@@ -237,7 +258,7 @@ def qnh(metar):
 
 def get_airport_option(metar, option):
     airport = settings.AIRPORTS[metar.location]
-    value = airport.get(option) 
+    value = airport.get(option)
     return value if isinstance(value, list) else [value]
 
 def ack(metar, letter):
