@@ -106,7 +106,7 @@ LPPR = {
     'transition_altitude': '4000',
     'clr_freq': (
         # freq, contact message
-        ('118.920', '[FOR ATC CLEARANCE CONTACT PORTO DEL]'),
+        ('118.925', '[FOR ATC CLEARANCE CONTACT PORTO DEL]'),
         ('118.000', '[PORTO DEL CLOSED]'),
         ('121.100', '[FREQ 118.0 CLOSED CONTACT FREQ 121.1]'),
         ('132.300', '[ON THE GROUND CONTACT 132.3]'),
