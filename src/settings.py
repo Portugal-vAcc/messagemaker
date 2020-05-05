@@ -122,8 +122,8 @@ LPPR = {
 }
 LPMA = {
     'approaches': {
-        '05': 'EXP VOR DME APCH OTHER APPROACHES AVBL O/R',
-        '23': 'EXP VOR DME APCH OTHER APPROACHES AVBL O/R'
+        '05': 'EXP VOR DME APCH OTHER APPROACHES AVBL O-R',
+        '23': 'EXP VOR DME APCH OTHER APPROACHES AVBL O-R'
     },
     'arrdep_info': {
         '05': [],
