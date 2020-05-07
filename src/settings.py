@@ -68,7 +68,7 @@ ADVISE BEFORE TAX]',
 }
 LPFR = {
     'approaches': {
-        '10': 'EXP R-NAV APCH',
+        '10': 'EXP ILS Z APCH',
         '28': 'EXP ILS APCH'
     },
     'arrdep_info': {
